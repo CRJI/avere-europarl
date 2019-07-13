@@ -2,6 +2,8 @@ from scrapy.spiders import XMLFeedSpider
 from scraper.items import MEP
 import scrapy
 
+import os
+
 
 class XMLParser(XMLFeedSpider):
     name = 'mep_xml'
@@ -19,9 +21,22 @@ class XMLParser(XMLFeedSpider):
 
 class MEPSCrawler(scrapy.Spider):
     name = 'mep'
+    base_url = 'https://www.europarl.europa.eu'
 
     def start_requests(self):
+        os.mkdir(self.dir_name)
         yield scrapy.Request(url=self.url, callback=self.parse)
 
     def parse(self, response):
-        print(response.body)
+        # get the table of contents on the left side and extract all links
+        table = response.xpath(('//aside[@class="ep_gridcolumn '
+                                'ep-layout_tableofcontent"]'))
+        links = [self.base_url + x for x in table.xpath('.//a/@href').getall()
+                 if x.startswith('/meps/')]
+
+        for link in links:
+            yield scrapy.Request(url=link, callback=self.parse_page)
+
+    def parse_page(self, response):
+        print(response.url)
+        pass

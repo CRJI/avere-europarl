@@ -6,13 +6,13 @@ scrape https://www.europarl.europa.eu/meps/
 
 ## TODO - scraper
 
-1. Add a .drone.yml file with flake8 check and click on the status icon above.
+1. Add a .drone.yml file with flake8 check and click on the status icon above. **DONE**
 
-2. Use scrapy to set up a minimal crawler.
+2. Use scrapy to set up a minimal crawler. **DONE**
 
 3. Implement the scraping:
 
- - get names and IDs from https://www.europarl.europa.eu/meps/en/directory/xml
+ - get names and IDs from https://www.europarl.europa.eu/meps/en/directory/xml **DONE**
  - for each page `https://www.europarl.europa.eu/meps/en/$ID`
    * get all Declaration pdfs
      - e.g. 2 PDF files from https://www.europarl.europa.eu/meps/en/124831/ISABELLA_ADINOLFI/declarations#mep-card-content
@@ -45,3 +45,11 @@ What is the total disk size of the output?
 Do the results change when running on 3 days in a row?
 
 Do we need to run OCR on any 2019 declarations?
+
+## Run
+To run simply do the following:
+
+```shell
+cd scraper
+./main.py
+```
