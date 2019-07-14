@@ -33,14 +33,14 @@ scrape https://www.europarl.europa.eu/meps/
            - 8th parlamentary term.html
          - ...      
  - print stats about what was done:
-   - how many MEPs?
-   - how many of them had pdfs looking like http://www.europarl.europa.eu/mepdif/124831_DFI_LEG9_rev0_IT.pdf under "Declarations"?  
+   - how many MEPs? **DONE**
+   - how many of them had pdfs looking like http://www.europarl.europa.eu/mepdif/124831_DFI_LEG9_rev0_IT.pdf under "Declarations"? **DONE**
 
 4. After this is done, load the data into a new collection on https://hoover.liquiddemo.org.
 
 ## TODO - take a look at the data
 
-What is the total disk size of the output?
+What is the total disk size of the output? - 1.7 GB
 
 Do the results change when running on 3 days in a row?
 

@@ -21,6 +21,7 @@ class XMLParser(XMLFeedSpider):
 class MEPSCrawler(scrapy.Spider):
     name = 'mep'
     base_url = 'https://www.europarl.europa.eu'
+    has_declaration = 0
 
     def start_requests(self):
         if os.path.isdir(self.dir_name) is False:
@@ -50,6 +51,7 @@ class MEPSCrawler(scrapy.Spider):
 
         # if in declaration section download all files
         if declaration.get():
+            self.has_declaration = 1
             docs_section = declaration.xpath(('.//..//..//..//..//..//..//..//'
                                               '..//following-sibling::*'))
             docs = docs_section.xpath('.//a[@target="_blank" and '
