@@ -13,6 +13,7 @@ import os
 BASE_URL = 'https://www.europarl.europa.eu/meps/en/'
 COUNT_DECLARATIONS = 0
 
+
 def do_count_decls(spider):
     if spider.has_declaration:
         global COUNT_DECLARATIONS
@@ -23,7 +24,7 @@ def do_count_decls(spider):
 def crawl(runner, data_dir):
     # if data directory does not exit create it
     if os.path.isdir(data_dir) is False:
-            os.mkdir(data_dir)
+        os.mkdir(data_dir)
 
     yield runner.crawl(XMLParser)
 
