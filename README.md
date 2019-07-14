@@ -14,13 +14,13 @@ scrape https://www.europarl.europa.eu/meps/
 
  - get names and IDs from https://www.europarl.europa.eu/meps/en/directory/xml **DONE**
  - for each page `https://www.europarl.europa.eu/meps/en/$ID`
-   * get all Declaration pdfs
+   * get all Declaration pdfs **DONE**
      - e.g. 2 PDF files from https://www.europarl.europa.eu/meps/en/124831/ISABELLA_ADINOLFI/declarations#mep-card-content
-   * for each section and subsection in the left pane, save a html file
+   * for each section and subsection in the left pane, save a html file **DONE**
      - e.g. curriculum-vitae.html for https://www.europarl.europa.eu/meps/en/124831/ISABELLA_ADINOLFI/cv#mep-card-content
      - the HTML content should start from the title, "Curriculum Vitae", until just above the next section, "Contact"
 
-   The scraper should download everything in a configurable folder which has the structure:
+   The scraper should download everything in a configurable folder which has the structure: **DONE**
 
        - $root/
          - Isabella Adinofli - 124831/
