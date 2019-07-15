@@ -7,54 +7,80 @@ from scrapy.settings import Settings
 from twisted.internet import reactor, defer
 from scrapy import signals
 
+import argparse
 import csv
 import os
 
 BASE_URL = 'https://www.europarl.europa.eu/meps/en/'
-COUNT_DECLARATIONS = 0
+count_declarations = 0
+count_meps = 0
 
 
-def do_count_decls(spider):
+def update_stats(spider):
+    global count_meps
+    count_meps = count_meps + 1
+
     if spider.has_declaration:
-        global COUNT_DECLARATIONS
-        COUNT_DECLARATIONS = COUNT_DECLARATIONS + 1
+        global count_declarations
+        count_declarations = count_declarations + 1
 
 
 @defer.inlineCallbacks
 def crawl(runner, data_dir):
-    # if data directory does not exit create it
-    if os.path.isdir(data_dir) is False:
-        os.mkdir(data_dir)
-
     yield runner.crawl(XMLParser)
 
     with open(data_dir + '/meps.csv') as f:
         csv_data = csv.reader(f)
-        for counter, line in enumerate(csv_data):
+        for line in csv_data:
             full_name, id = line
             dir_name = f'{data_dir}/{full_name} - {id}'
             url = BASE_URL + id
 
             crawler_object = runner.create_crawler(MEPSCrawler)
-            crawler_object.signals.connect(do_count_decls,
+            crawler_object.signals.connect(update_stats,
                                            signals.spider_closed)
 
             yield runner.crawl(crawler_object, url=url, dir_name=dir_name)
 
-            if counter >= 2:
-                break
+    reactor.stop()
 
-        print(f'Number of MEPs: {counter+1}')
-        print(f'MEPs with declarations: {COUNT_DECLARATIONS}')
+
+@defer.inlineCallbacks
+def crawl_id(runner, data_dir, id):
+    crawler_object = runner.create_crawler(MEPSCrawler)
+    crawler_object.signals.connect(update_stats, signals.spider_closed)
+
+    dir_name = f'{data_dir}/TEST - {id}'
+    url = BASE_URL + id
+
+    yield runner.crawl(crawler_object, url=url, dir_name=dir_name)
 
     reactor.stop()
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--id', nargs=1, help='MEP id')
+    args = parser.parse_args()
+
     project_settings = Settings(get_project_settings())
     runner = CrawlerRunner(settings=project_settings)
-    crawl(runner, project_settings.get('DATA_DIR'))
+
+    data_dir = project_settings.get('DATA_DIR')
+
+    # if data directory does not exit create it
+    if os.path.isdir(data_dir) is False:
+        os.mkdir(data_dir)
+
+    if args.id is None:
+        crawl(runner, data_dir)
+    else:
+        crawl_id(runner, data_dir, args.id[0])
+
     reactor.run()
+
+    print(f'Number of MEPs: {count_meps}')
+    print(f'MEPs with declarations: {count_declarations}')
 
 
 if __name__ == '__main__':

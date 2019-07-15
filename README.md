@@ -53,3 +53,9 @@ To run simply do the following:
 cd scraper
 ./main.py
 ```
+
+### Arguments
+```shell
+./main.py --id 123456
+```
+Will create a folder called `TEST - 123456` in `./data/` where it will save the data scraped from the MEP with the `id` 123456
