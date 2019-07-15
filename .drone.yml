@@ -43,6 +43,8 @@ steps:
     - ls /app/scraper/data
     - ls '/app/scraper/data/TEST - 124831'
     - ls '/app/scraper/data/TEST - 124831/Home.html'
+    - ls '/app/scraper/data/TEST - 124831/124831_DFI_rev0_IT.pdf'
+    - ls '/app/scraper/data/TEST - 124831/9th parliamentary term.html'
 
 ---
 

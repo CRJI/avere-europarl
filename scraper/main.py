@@ -69,25 +69,25 @@ def main():
     project_settings = Settings(get_project_settings())
 
     configure_logging(project_settings)
-    logging.getLogger('scrapy').setLevel(logging.WARNING)
+    logger = logging.getLogger(__name__)
 
     runner = CrawlerRunner(settings=project_settings)
 
     data_dir = project_settings.get('DATA_DIR')
     os.makedirs(data_dir, exist_ok=True)
 
-    logging.info("Started crawling!")
+    logger.info("Started crawling!")
     if args.id is None:
         crawl(runner, data_dir)
     else:
         crawl_id(runner, data_dir, args.id[0])
 
     reactor.run()
-    logging.info("Stopped crawling!")
+    logger.info("Stopped crawling!")
 
-    logging.info('------STATS------')
-    logging.info(f'Number of MEPs: {count_meps}')
-    logging.info(f'MEPs with declarations: {count_declarations}')
+    logger.info('------STATS------')
+    logger.info(f'Number of MEPs: {count_meps}')
+    logger.info(f'MEPs with declarations: {count_declarations}')
 
 
 if __name__ == '__main__':

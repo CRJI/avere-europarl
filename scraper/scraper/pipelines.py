@@ -24,4 +24,5 @@ class SaveMepsCSV(object):
             csv_file = csv.writer(f)
             csv_file.writerows(self.meps)
 
-        logging.info(f"Xml saved as csv in {filename}!")
+        logger = logging.getLogger(__name__)
+        logger.info(f"Xml saved as csv in {filename}!")
