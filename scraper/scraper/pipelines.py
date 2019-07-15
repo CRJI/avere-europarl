@@ -1,4 +1,6 @@
 from scrapy.utils.project import get_project_settings
+
+import logging
 import csv
 import os
 
@@ -17,6 +19,9 @@ class SaveMepsCSV(object):
             return
 
         dir_name = get_project_settings().get('DATA_DIR')
-        with open(os.path.join(dir_name, 'meps.csv'), 'w') as f:
+        filename = os.path.join(dir_name, 'meps.csv')
+        with open(filename, 'w') as f:
             csv_file = csv.writer(f)
             csv_file.writerows(self.meps)
+
+        logging.info(f"Xml saved as csv in {filename}!")

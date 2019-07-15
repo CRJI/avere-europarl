@@ -20,7 +20,7 @@ trigger:
   - tag
 
 depends_on:
-  - test
+- test
 
 steps:
 - name: docker push branch ${DRONE_COMMIT_BRANCH}
@@ -52,11 +52,11 @@ kind: pipeline
 name: test app
 
 depends_on:
-  - publish to docker hub
+- publish to docker hub
 
 steps:
 - name: test
-  image: liquidinvestigations/crji-avere-europarl:scraper
+  image: liquidinvestigations/crji-avere-europarl:${DRONE_COMMIT_BRANCH}
   commands:
     - python3 /app/scraper/main.py --id 124831
     - ls /app/scraper/data

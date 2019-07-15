@@ -24,6 +24,8 @@ class MEPSCrawler(scrapy.Spider):
     has_declaration = 0
 
     def start_requests(self):
+        self.logger.info(f"Crawling MEP: {self.dir_name.split('/')[-1]}!")
+
         if os.path.isdir(self.dir_name) is False:
             os.mkdir(self.dir_name)
         yield scrapy.Request(url=self.url, callback=self.parse_table)
@@ -40,14 +42,20 @@ class MEPSCrawler(scrapy.Spider):
                                  dont_filter=True)
 
     def parse_page(self, response):
+        self.logger.info(f"Crawling page: {response.url}")
+
         page_content = response.xpath('//div[@class="ep_gridcolumn"]')
         title = page_content.xpath('.//span[@class="ep_name"]//text()').get()
 
         with open(f'{self.dir_name}/{title}.html', 'w') as f:
             f.write(page_content.get())
 
-        declaration = page_content.xpath('.//span[@class="ep_name" '
-                                         'and text()= "Declarations"]')
+        decl_as_title = ('.//div[@class="ep_gridrow ep-o_product"]//div//div//'
+                         'div//h1//div//div//span[text()="Declarations"]')
+        decl_as_section = ('.//div[@class="ep_gridrow ep-o_product"]//div//div'
+                           '//div//h2//div//div//span[text()="Declarations"]')
+        declaration = page_content.xpath((f'{decl_as_title} '
+                                          f'| {decl_as_section}'))
 
         # if in declaration section download all files
         if declaration.get():

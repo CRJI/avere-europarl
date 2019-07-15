@@ -5,9 +5,11 @@ from scraper.spiders.meps import XMLParser, MEPSCrawler
 from scrapy.utils.project import get_project_settings
 from scrapy.settings import Settings
 from twisted.internet import reactor, defer
+from scrapy.utils.log import configure_logging
 from scrapy import signals
 
 import argparse
+import logging
 import csv
 import os
 
@@ -65,20 +67,27 @@ def main():
 
     os.environ['SCRAPY_SETTINGS_MODULE'] = 'scraper.settings'
     project_settings = Settings(get_project_settings())
+
+    configure_logging(project_settings)
+    logging.getLogger('scrapy').setLevel(logging.WARNING)
+
     runner = CrawlerRunner(settings=project_settings)
 
     data_dir = project_settings.get('DATA_DIR')
     os.makedirs(data_dir, exist_ok=True)
 
+    logging.info("Started crawling!")
     if args.id is None:
         crawl(runner, data_dir)
     else:
         crawl_id(runner, data_dir, args.id[0])
 
     reactor.run()
+    logging.info("Stopped crawling!")
 
-    print(f'Number of MEPs: {count_meps}')
-    print(f'MEPs with declarations: {count_declarations}')
+    logging.info('------STATS------')
+    logging.info(f'Number of MEPs: {count_meps}')
+    logging.info(f'MEPs with declarations: {count_declarations}')
 
 
 if __name__ == '__main__':

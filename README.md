@@ -6,7 +6,16 @@ Scrape https://www.europarl.europa.eu/meps/
 
 ## Usage
 
-### Install requirements
+### Run with docker
+
+```shell
+./start.sh
+```
+It will create a folder `data`  with all the scraped information in it
+
+### Run locally
+
+#### Install requirements
 
 - Built on python-3.6.8
 
@@ -16,21 +25,14 @@ sudo apt install python3 python3-pip
 pip3 install Scrapy==1.6.0
 ```
 
-### Run the program
+#### Run the program
 ```shell
 cd scraper
 ./main.py
 ```
 Creates a folder `./data/` where it will dump all the scraped data from every MEP
 
-### Run with docker
-
-```shell
-./start.sh
-```
-It will create a folder `data`  with all the scraped information in it
-
-### Arguments
+#### Arguments
 ```shell
 ./main.py --id 123456
 ```
