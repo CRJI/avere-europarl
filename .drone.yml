@@ -10,7 +10,7 @@ steps:
 ---
 
 kind: pipeline
-name: publish to docker hub
+name: test app
 
 trigger:
   status:
@@ -36,6 +36,23 @@ steps:
     event:
     - push
 
+- name: test
+  image: liquidinvestigations/crji-avere-europarl:${DRONE_COMMIT_BRANCH}
+  commands:
+    - python3 /app/scraper/main.py --id 124831
+    - ls /app/scraper/data
+    - ls '/app/scraper/data/TEST - 124831'
+    - ls '/app/scraper/data/TEST - 124831/Home.html'
+
+---
+
+kind: pipeline
+name: publish to docker hub
+
+depends_on:
+- test app
+
+steps:
 - name: docker push autotag + latest
   image: plugins/docker
   settings:
@@ -46,22 +63,6 @@ steps:
     password:
       from_secret: docker_password
 
----
-
-kind: pipeline
-name: test app
-
-depends_on:
-- publish to docker hub
-
-steps:
-- name: test
-  image: liquidinvestigations/crji-avere-europarl:${DRONE_COMMIT_BRANCH}
-  commands:
-    - python3 /app/scraper/main.py --id 124831
-    - ls /app/scraper/data
-    - ls '/app/scraper/data/TEST - 124831'
-    - ls '/app/scraper/data/TEST - 124831/Home.html'
 ---
 kind: secret
 name: docker_username
