@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from pathlib import Path
+
 # Scrapy settings for scraper project
 #
 # For simplicity, this file contains only settings considered important or
@@ -91,4 +93,4 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-DATA_DIR = 'data'
+DATA_DIR = str(Path(__file__).resolve().parent.parent / 'data')

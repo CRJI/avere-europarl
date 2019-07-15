@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 from scrapy.crawler import CrawlerRunner
 from scraper.spiders.meps import XMLParser, MEPSCrawler
@@ -29,7 +29,7 @@ def update_stats(spider):
 def crawl(runner, data_dir):
     yield runner.crawl(XMLParser)
 
-    with open(data_dir + '/meps.csv') as f:
+    with open(os.path.join(data_dir, 'meps.csv')) as f:
         csv_data = csv.reader(f)
         for line in csv_data:
             full_name, id = line
@@ -67,10 +67,7 @@ def main():
     runner = CrawlerRunner(settings=project_settings)
 
     data_dir = project_settings.get('DATA_DIR')
-
-    # if data directory does not exit create it
-    if os.path.isdir(data_dir) is False:
-        os.mkdir(data_dir)
+    os.makedirs(data_dir, exist_ok=True)
 
     if args.id is None:
         crawl(runner, data_dir)
