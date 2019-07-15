@@ -20,7 +20,7 @@ trigger:
   - tag
 
 depends_on:
-- test
+  - test
 
 steps:
 - name: docker push branch ${DRONE_COMMIT_BRANCH}
@@ -46,6 +46,22 @@ steps:
     password:
       from_secret: docker_password
 
+---
+
+kind: pipeline
+name: test app
+
+depends_on:
+  - publish to docker hub
+
+steps:
+- name: test
+  image: liquidinvestigations/crji-avere-europarl:scraper
+  commands:
+    - python3 /app/scraper/main.py --id 124831
+    - ls /app/scraper/data
+    - ls '/app/scraper/data/TEST - 124831'
+    - ls '/app/scraper/data/TEST - 124831/Home.html'
 ---
 kind: secret
 name: docker_username

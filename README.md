@@ -23,6 +23,13 @@ cd scraper
 ```
 Creates a folder `./data/` where it will dump all the scraped data from every MEP
 
+### Run with docker
+
+```shell
+./start.sh
+```
+It will create a folder `data`  with all the scraped information in it
+
 ### Arguments
 ```shell
 ./main.py --id 123456
@@ -46,11 +53,11 @@ This will create a folder called `TEST - 123456` in `./data/` where it will save
 
     - $root/scraper/data/
       - $MEP_FULL_NAME - $ID/
-            - declaration1.pdf
-            - declaration2.pdf
-            - section1.html
-            - section2.html
-            - ...
+          * declaration1.pdf
+          * declaration2.pdf
+          * section1.html
+          * section2.html
+          * ...
 
  4. prints stats about what was done:
    - how many MEPs?

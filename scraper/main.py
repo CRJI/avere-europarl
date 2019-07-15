@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from scrapy.crawler import CrawlerRunner
 from scraper.spiders.meps import XMLParser, MEPSCrawler
@@ -63,6 +63,7 @@ def main():
     parser.add_argument('--id', nargs=1, help='MEP id')
     args = parser.parse_args()
 
+    os.environ['SCRAPY_SETTINGS_MODULE'] = 'scraper.settings'
     project_settings = Settings(get_project_settings())
     runner = CrawlerRunner(settings=project_settings)
 
