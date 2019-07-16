@@ -1,0 +1,80 @@
+kind: pipeline
+name: test
+
+steps:
+- name: flake8
+  image: alpine/flake8:3.7.7
+  commands:
+  - flake8
+
+---
+
+kind: pipeline
+name: test app
+
+trigger:
+  status:
+  - success
+  event:
+  - push
+  - tag
+
+depends_on:
+- test
+
+steps:
+- name: docker push branch ${DRONE_COMMIT_BRANCH}
+  image: plugins/docker
+  settings:
+    repo: liquidinvestigations/crji-avere-europarl
+    tags: ${DRONE_COMMIT_BRANCH}
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  when:
+    event:
+    - push
+
+- name: test
+  image: liquidinvestigations/crji-avere-europarl:${DRONE_COMMIT_BRANCH}
+  commands:
+    - python3 /app/scraper/main.py --id 124831
+    - ls /app/scraper/data
+    - ls '/app/scraper/data/TEST - 124831'
+    - ls '/app/scraper/data/TEST - 124831/Home.html'
+    - ls '/app/scraper/data/TEST - 124831/124831_DFI_rev0_IT.pdf'
+    - ls '/app/scraper/data/TEST - 124831/9th parliamentary term.html'
+
+---
+
+kind: pipeline
+name: publish to docker hub
+
+depends_on:
+- test app
+
+steps:
+- name: docker push autotag + latest
+  image: plugins/docker
+  settings:
+    repo: liquidinvestigations/crji-avere-europarl
+    auto_tag: true
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+---
+kind: secret
+name: docker_username
+get:
+  path: liquid/ci/drone.docker
+  name: username
+
+---
+kind: secret
+name: docker_password
+get:
+  path: liquid/ci/drone.docker
+  name: password
