@@ -22,7 +22,7 @@ It will create a folder `data`  with all the scraped information in it
 ```shell
 sudo apt update
 sudo apt install python3 python3-pip
-pip3 install Scrapy==1.6.0
+pip3 install Scrapy==1.6.0 beautifulsoup4
 ```
 
 #### Run the program
