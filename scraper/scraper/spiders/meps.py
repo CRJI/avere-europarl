@@ -1,5 +1,6 @@
 from scrapy.spiders import XMLFeedSpider
 from scraper.items import MEP
+from bs4 import BeautifulSoup
 import scrapy
 
 import os
@@ -47,8 +48,11 @@ class MEPSCrawler(scrapy.Spider):
         page_content = response.xpath('//div[@class="ep_gridcolumn"]')
         title = page_content.xpath('.//span[@class="ep_name"]//text()').get()
 
-        with open(f'{self.dir_name}/{title}.html', 'w') as f:
-            f.write(page_content.get())
+        with open(f'{self.dir_name}/{title}.txt', 'w') as f:
+            f.write(f'ORIGINAL URL: {response.url}\n\n\n')
+            soup = BeautifulSoup(page_content.get(), 'html.parser')
+            f.write("\n".join([ll.rstrip()
+                    for ll in soup.get_text().splitlines() if ll.strip()]))
 
         decl_as_title = ('.//div[@class="ep_gridrow ep-o_product"]//div//div//'
                          'div//h1//div//div//span[text()="Declarations"]')
