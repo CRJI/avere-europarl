@@ -6,7 +6,7 @@ job "scraper" {
     task "scraper" {
       driver = "docker"
       config {
-        image = "liquidinvestigations/crji-avere-europarl:on-nomad"
+        image = "liquidinvestigations/crji-avere-europarl"
         command = "/app/scraper/main.py"
 
         volumes = [
