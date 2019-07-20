@@ -38,6 +38,7 @@ steps:
 
 - name: test
   image: liquidinvestigations/crji-avere-europarl:${DRONE_COMMIT_BRANCH}
+  pull: true
   commands:
     - python3 /app/scraper/main.py --id 124831
     - ls /app/scraper/data
