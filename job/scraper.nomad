@@ -1,8 +1,13 @@
-job "scraper" {
+job "scraper-cron" {
   datacenters = ["dc1"]
   type = "batch"
+  periodic {
+    cron = "@daily"
+    prohibit_overap = true
+  }
 
    group "scraper" {
+    count = 3
     task "scraper" {
       driver = "docker"
       config {
@@ -15,7 +20,7 @@ job "scraper" {
       }
       resources {
         memory = 256
-        cpu = 2000
+        cpu = 600
       }
     }
   }
